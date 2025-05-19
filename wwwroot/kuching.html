@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Image Slider */
+        .slider-container {
+            width: 50%; /* Adjust width as needed */
+            max-width: 350px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Bottom Navigation Buttons */
+        .bottom-navigation {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f5f0e1; /* Match body background or choose another */
+        }
+
+        .bottom-btn {
+            display: inline-block;
+            background-color: #a27943; /* Dark button */
+            color: #f5f0e1; /* Light text */
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .bottom-btn:hover {
+            background-color: #e4a81d; /* Golden yellow on hover */
+            color: #a27943;
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        table { /* The operating hours table */
+            margin: 0 auto;  /* This will center the table */
+            border-collapse: collapse;  /* Optional: makes the table look cleaner */
+            width: 50%;  /* Optional: you can set a percentage width */
+        }
+        th, td {
+            padding: 10px;  /* Adds space inside the cells */
+            border: 1px solid black;
+            text-align: center;  /* Centers the text inside the cells */
+        }
+
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+
+        /* Sarawak Map */
+        #mapContainer {
+            display: none; /* start with the map hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <div class="slider-container"> <!-- first slider on top-->
+        <div class="slider">
+            <img src="pics/kch1.jpg" alt="Slide 1" class="slide">
+            <img src="pics/kch2.jpg" alt="Slide 2" class="slide">
+            <img src="pics/kch3.jpg" alt="Slide 3" class="slide">
+        </div>
+        <button class="prev-btn" id="prevBtn">&#10094;</button>
+        <button class="next-btn" id="nextBtn">&#10095;</button>
+    </div>
+
+    <main>
+        <h1>Welcome to Kuching, Sarawak</h1>
+        <p>Kuching, the capital of Sarawak, Malaysia, is a vibrant city known for its rich history, diverse culture, and stunning natural surroundings. Situated along the Sarawak River, Kuching blends modern development with well-preserved colonial architecture and indigenous heritage. The name "Kuching" sounds like the Malay word for cat "kucing", leading to its nickname "Cat City".<br>
+        <br>Kuching has a mix of nature, culture, and history, making it a fantastic destination for all types of travelers. Here are the must-visit places in Kuching.</p>
+        <div style="height: 4515px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+            <h2>BORNEO CULTURES MUSEUM</h2>
+            <div class="slider-container"> <!-- second slider-->
+                <div class="slider">
+                    <img src="pics/37.jpeg" alt="Slide 1" class="slide">
+                    <img src="pics/80.jpg" alt="Slide 2" class="slide">
+                    <img src="pics/bcm.jpeg" alt="Slide 3" class="slide">
+                    <img src="https://media.malaysianow.com/wp-content/uploads/2022/03/06224939/BCM-Gallery-11.jpg" alt="Slide 4" class="slide">
+                    <img src="https://media.malaysianow.com/wp-content/uploads/2022/03/06225128/BCM-Gallery-51.jpg" alt="Slide 5" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>The Borneo Cultures Museum (Malay: <b>Muzium Budaya Borneo</b>) is a museum located in Kuching, Sarawak, Malaysia. It is the largest museum in Malaysia and the second largest in Southeast Asia. The museum displays artifacts relating to the history and cultural heritage of Sarawak’s local people, as well as others on Borneo island.<br>
+            <br>Within this five-story structure, every gallery provides a unique experience. "Love our Rivers" is the topic of the second-level children's gallery, followed by "In Harmony with Nature" on the third floor, "Time Changes" on the fourth floor, and "Objects of Desire" on the fifth floor.</p>
+
+            <!-- Operating Hours Table -->
+            <table border="1">
+            <tr>
+                <th>Day</th>
+                <th>Operating Hours</th>
+            </tr>
+            <tr>
+                <td>Monday - Friday</td>
+                <td>9:00 AM - 4:45 PM</td>
+            </tr>
+            <tr>
+                <td>Saturday, Sunday & Public Holidays</td>
+                <td>9:30 AM - 4:30 PM</td>
+            </tr><br>
+            </table>
+            <br><br>
+            <br><h2>FAIRY CAVES & WIND CAVES</h2>
+            <div class="slider-container"> <!-- third slider-->
+                <div class="slider">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0e/36/f2/96/breathtaking.jpg?w=900&h=500&s=1" alt="Slide 1" class="slide">
+                    <img src="https://sarawakforestry.com/layout2/wp-content/uploads/2017/05/wind-cave-photo1.png" alt="Slide 2" class="slide">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/a7/0f/73/photo3jpg.jpg?w=900&h=500&s=1" alt="Slide 3" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>On this thrilling half-day excursion from Kuching, explore some intriguing and very different caverns in the gold-mining town of Bau, which is surrounded by the breathtaking limestone Karst mountain. Bats abound in Wind Cave. You can hear the bats hanging from the cave's ceiling as you make your way through the eerie, dark tunnels on the wooden plank.<br>
+            <br>You can reach <b>Fairy Cave National Park</b>, which has an amazing, enormous chamber halfway up a mountain, with a short drive. The chamber's entrance is reached by climbing a flight of stairs.</p>
+           
+            <!-- Operating Hours Table -->
+            <table border="1">
+            <tr>
+                <th>Day</th>
+                <th>Operating Hours</th>
+            </tr>
+            <tr>
+                <td>Monday - Thursday</td>
+                <td>8:00 AM - 1:00 PM & 2:00 PM - 5:00 PM</td>
+            </tr>
+            <tr>
+                <td>Friday</td>
+                <td>8:00 AM - 11:45 PM & 2:15 PM - 5:00 PM</td>
+            </tr>
+            <tr>
+                <td>Saturday, Sunday & Public Holidays</td>
+                <td>CLOSED</td>
+            </tr><br>
+            </table>
+            <br><br>
+            <br><h2>KUCHING WATERFRONT & DARUL HANA BRIDGE</h2>
+            <div class="slider-container"> <!-- fourth slider-->
+                <div class="slider">
+                    <img src="https://www.agoda.com/wp-content/uploads/2020/11/Kuching-Waterfront-kuching-attractions-malaysia.jpg" alt="Slide 1" class="slide">
+                    <img src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1200,h_630/activities/s7mlx3vyc4egzi1hdap8/SarawakRoyalKuchingCruiseExperience-KlookMalaysia.jpg" alt="Slide 2" class="slide">
+                    <img src="https://pandupelancong.com/wp-content/uploads/2023/12/Bangunan-Dewan-Undangan-Negeri-Sarawak-1024x768.webp" alt="Slide 3" class="slide">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/94/Old_Court_House_Complex%2C_Kuching_03.jpg" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Along the Sarawak River, Kuching Waterfront is a picturesque promenade that is well-known for its history, regional cuisine, historical sites, and the famous Darul Hana Bridge.<br>
+            <br>Strolling along the tree-lined promenade, taking in street performances, and sampling local cuisine and crafts from the numerous cafes and shops are all options for visitors. Important attractions in the region include the Old Courthouse, the Astana, the former home of the White Rajahs, and the famous Darul Hana Bridge, which provides breathtaking city views, particularly at night.</p><br>
+            <br><br>
+            <br><h2>SARAWAK CULTURAL VILLAGE</h2>
+            <div class="slider-container"> <!-- third slider-->
+                <div class="slider">
+                    <img src="https://dbku.sarawak.gov.my/modules/web/image_show.php?id=1053" alt="Slide 1" class="slide">
+                    <img src="https://exarc.net/sites/default/files/styles/full_size_1140/public/aboriginal_sarawak_meeting_hall_28974054404.jpg?itok=XUL7jHum" alt="Slide 2" class="slide">
+                    <img src="https://greatleap.com.my/wp-content/uploads/2021/01/SCV7.jpg" alt="Slide 3" class="slide">
+                    <img src="https://cphtravel.com.my/wp-content/uploads/2018/09/SCV_2.jpg" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Located directly across from Damai Beach Resort and Hotels, the 17-acre Sarawak Cultural Village is an award-winning Living Museum. Discover the local customs and ways of life of Sarawak's diverse ethnic groups by spending half a day at the Sarawak Cultural Village.<br>
+            <br>Every significant ethnic group in Sarawak is represented with replica buildings at Sarawak Cultural Village, primarily the Bidayuh, Iban, Orang Ulu, Penan, Melanau, Malay, and Chinese. Members of the ethnic groups who work in all buildings are dressed traditionally and perform customary tasks. The staff members describe and interpret our way of life in the role of storytellers. They will also gladly pose for pictures with you!</p>
+            <br><b>OPERATING HOURS :</b> 9:00 AM - 5:00 PM (Everyday)<br>
+            <br><br> 
+            <br><h2>SEMENGGOH WILDLIFE CENTRE</h2>
+            <div class="slider-container"> <!-- fourth slider-->
+                <div class="slider">
+                    <img src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1626,h_1080/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/m6phae1pnkf2ka55ipek/SarawakSemenggohWildlifeCentreTripfromKuching-KlookMalaysia.jpg" alt="Slide 1" class="slide">
+                    <img src="https://a.travel-assets.com/findyours-php/viewfinder/images/res70/36000/36457-Semengoh-Wildlife-Centre.jpg" alt="Slide 2" class="slide">
+                    <img src="https://www.malaysia-traveller.com/images/semenggoh-wildlife-centre-map.jpg" alt="Slide 3" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>The Semenggoh Wildlife Centre was founded in 1975 and provides care for wild creatures who have been injured, abandoned, or were once illegal pets. It is situated in the Semenggoh Nature Reserve, 24 km from Kuching, and its primary objectives are:<br>
+            <br><strong>Rehabilitate animals who have been hurt or kept in captivity so they can return to the wild.</strong><br>
+            <br><strong>Research animals and run endangered species breeding programs.</strong><br>
+            <br><strong>Inform others about conservation.</strong><br>
+            <br>Although the Center has provided care for endangered creatures of many other species, its effective orangutan rehabilitation program has earned it the most notoriety. The forest's capacity was reached due to the large number of reintroduced orangutans, therefore rehabilitation efforts were moved to the Matang Wildlife Centre.<br>
+            <br>In addition to offering a natural habitat for semi-wild orangutans, including those born in the wild to rehabilitated moms, Semenggoh now concentrates on the research of orangutan biology and behavior. Seeing these amazing creatures in their native environment is made possible via a trip to Semenggoh.<br>
+            <br><b>OPERATING HOURS :</b> Monday - Sunday (8:00 AM - 10:00 AM & 2:00 PM - 4:00 PM)<br>
+            <br><b>FEEDING TIME :</b> 9:00 AM - 10:00 AM & 3:00 PM - 4:00 PM</p>
+            <br><br>
+            <br><h2>MOUNT SANTUBONG & DAMAI BEACH</h2>
+            <div class="slider-container"> <!-- fifth slider-->
+                <div class="slider">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/45/Santubong_Peninsula_seen_from_Santubong_River_%2815850215991%29.jpg" alt="Slide 1" class="slide">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/7e/68/02/20191223-093004-largejpg.jpg?w=900&h=-1&s=1" alt="Slide 2" class="slide">
+                    <img src="https://i0.wp.com/borneoadventure.com/v3/wp-content/uploads/2012/01/sarawak-damai-beach-01.jpg?fit=2000%2C1500&quality=60&strip=all&ssl=1" alt="Slide 3" class="slide">
+                    <img src="https://golf-pass.brightspotcdn.com/20/a8/11cd08db56ea5ccbf98453252ab7/30417.jpg" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p><b>Santubong National Park</b>
+            <br>A day trip to Santubong National Park is highly recommended. Santubong is situated 35 kilometers north of Kuching on the Damai Peninsula. Its erratic, rainforest-covered summits climb sharply to 810 meters above sea level, creating a catchment area for a wide range of animals. The Sarawak Cultural Village, nearby fishing villages, and hotel resorts are all beautifully framed by Gunung Santubong.<br>
+            <br>Swimming at the Waterfall and trekking to Santubong Summit are the two most popular activities here. Most days you can see its impressive peak from Kuching. Ask a local about the story of the Santubong princess when you are there!<br>
+            <br><b>Damai Beach</b>
+            <br>Damai offers a vast array of activities for you to choose from. You will undoubtedly have the most memorable time while staying with us at Damai, whether it's a leisurely stroll along the beach while taking in the breathtaking sunset and the amazing sounds of the South China Sea's crashing tides, an exhilarating jungle and mountain-trekking adventure in Borneo's lush tropical rainforest, or a sun-drenched day of canoeing on Damai Beach itself.<br>
+            <br>A round of golf at the Damai Golf & Country Club sounds amazing, which is only a short drive from the resort and features serene, beautiful greens. If you decide to spend a relaxed day on the resort grounds, try playing beach volleyball or beach soccer and soaking your feet in the warm white sands.<br>
+            <br><b>OPERATING HOURS :</b> Santubong National Park, Monday - Sunday (8:00 AM - 5:00 PM)</p>
+       </div>
+    </main>
+
+    <div class="bottom-navigation">
+         <a href="miri.html" class="bottom-btn">Explore Miri</a>
+         <a href="sibu.html" class="bottom-btn">Explore Sibu</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+
+        document.querySelectorAll(".slider-container").forEach((container) => {
+        const slider = container.querySelector(".slider");
+        const slides = container.querySelectorAll(".slide");
+        const prevBtn = container.querySelector(".prev-btn");
+        const nextBtn = container.querySelector(".next-btn");
+
+        let index = 0;
+
+        function updateSlider() {
+            const offset = -index * 100;
+            slider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            index = (index - 1 + slides.length) % slides.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            index = (index + 1) % slides.length;
+            updateSlider();
+        });
+
+        updateSlider(); // Initialize slider position
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup Page</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, san-serif;
+        }
+        body {
+            background: url('background.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container, form, .form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        .form-input, .form {
+            backdrop-filter: blur(5px);
+            width: 400px;
+            height: 500px;
+            color: #fff;
+            border-radius: 10px;
+        }
+        .title {
+            font-size: 30px;
+            font-weight: bold;
+            font-family: Arial, san-serif;
+            font-style: italic;
+            text-align: center;
+            color: #f5f0e1;
+        }
+        #email, #username, #password, #confirmpassword {
+            background: transparent;
+            padding: 10px;
+            width: 80%;
+            border-left: none;
+            border-right: none;
+            border-top: none;
+            border-bottom: 1px solid #fff;
+            color: #fff;
+            transition: all ease-in-out 0.2s;
+        }
+        #email:focus, #username:focus, #password:focus, #confirmpassword:focus {
+            outline: #a2794329;
+        }
+        #email:hover, #username:hover, #password:hover, #confirmpassword:hover {
+            box-shadow: 0 0 10px 0 #e4a81d inset, 0 0 20px 2px #e4a81d;
+        }
+        #email::placeholder, #username::placeholder, #password::placeholder, #confirmpassword::placeholder {
+            color: #fff;
+        }
+        .submit-btn {
+            padding: 10px;
+            background: transparent;
+            cursor: pointer;
+            color: #fff;
+            border: 1px solid #fff;
+            border-radius: 10px;
+            width: 70%;
+            transition: all ease-in-out 0.2s;
+        }
+        .submit-btn:hover {
+            background: #e4a81d;
+            border: 1px solid #e4a81d;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form">
+        <br><br><br><br>
+        <div class="title">SARAWAK TOURISM</div>
+            <form id="signupForm" class="form-input">
+                <input type="text" placeholder="Email" required id="email">
+                <input type="text" placeholder="Username" required id="username">
+                <input type="password" placeholder="Password" id="password" required placeholder="Password">
+                <input type="password" placeholder="Confirm password" id="confirmpassword" required placeholder="Password">
+                <br><br>
+                <button class="submit-btn">Done</button>
+            </form>
+        </div>
+    </div>
+    <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmpassword').value;
+        
+        // Check if passwords match
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+        
+        // Send signup data to backend to check for existing username
+        fetch('/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, username, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert("Signup successful! Please log in.");
+                window.location.href = "login.html";  // Redirect to login page
+            } else {
+                if (data.message === "Username is taken") {
+                    alert("This username is already taken. Please choose a different one.");
+                } else if (data.message === "Email already registered") {
+                    alert("This email is already registered. Please use a different email.");
+                } else {
+                    alert("Signup failed: " + data.message);
+                }
+            }
+        })
+        .catch(error => {
+            console.error("Signup error:", error);
+            alert("An error occurred. Please try again.");
+        });
+    });
+    </script>
+    <script src="js/signup.js"></script>        
+</body>
+</html>

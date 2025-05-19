@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarawak - The Untamed Beauty of Borneo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        /* Use Inter font as default, Playfair Display for the main title */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        h1 {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Basic styling for background */
+        .hero-bg {
+            /* Placeholder image representing Sarawak */
+            background-image: url('https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/41/70/04/the-view-of-the-sarawak.jpg?w=1200&h=-1&s=1');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        /* Style for the blurred background effect */
+        .text-backdrop::before {
+            content: '';
+            position: absolute;
+            inset: -1.5rem; /* Add padding around the text area */
+            background-color: #a2794303; /* Semi-transparent black */
+            backdrop-filter: blur(1px); /* Apply blur effect */
+            -webkit-backdrop-filter: blur(1px); /* Safari compatibility */
+            border-radius: 0.75rem; /* Rounded corners */
+            z-index: -1; /* Place it behind the text content */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="hero-bg relative flex items-center justify-start min-h-screen text-white px-8 md:px-16 lg:px-24">
+        <div class="relative z-10 text-left max-w-2xl p-6 text-backdrop">
+            <h1 class="text-6xl md:text-8xl font-bold mb-2 text-yellow-400">SARAWAK</h1>
+            <h2 class="text-1xl md:text-3xl font-bold mb-4">The Untamed Beauty of Borneo</h2>
+            <p class="text-lg md:text-xl mb-8">nature, culture, adventure await you</p>
+
+            <div class="flex justify-start space-x-4">
+            <a href="login.html">
+                <button class="bg-transparent hover:bg-white hover:text-yellow-600 text-white font-semibold py-2 px-6 border border-white hover:border-transparent rounded-lg transition duration-300 ease-in-out">
+                    Log in
+                </button>
+            </a>
+            <a href="signup.html">
+                <button class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold py-2 px-6 rounded-lg transition duration-300 ease-in-out">
+                    Sign up
+                </button>
+            </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

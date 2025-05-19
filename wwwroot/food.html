@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .image-row { /* for images */
+            display: flex;
+            justify-content: center; /* or space-between / space-around */
+            gap: 20px; /* spacing between images */
+            margin-top: 50px;
+            align-items: flex-start;
+        }
+
+        .side-image {
+            max-width: 450px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 8px;
+        }
+
+        /* Image Slider */
+        .slider-container {
+            width: 70%; /* Adjust width as needed */
+            max-width: 300px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+
+        /* Sarawak Map */
+        #mapContainer {
+            display: none; /* start with the map hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div style="height: 5080px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+        <h1>Sarawak's Famous Food and Drinks</h1>
+        <p>Sarawak’s food and drinks showcase a unique fusion of indigenous, Chinese, Malay, and Melanau influences, creating flavors that are both bold and distinctive.<br>
+        <br>From savory traditional dishes to refreshing local beverages, Sarawakian cuisine highlights fresh ingredients, aromatic spices, and unique cooking techniques. Whether it’s a hearty meal or a sweet treat, every bite and sip offers a taste of Borneo’s rich culinary heritage.</p>
+        <br><br>
+        <h2>LAKSA SARAWAK</h2>
+        <div class="slider-container"> <!-- first slider-->
+            <div class="slider">
+                <img src="https://preview.redd.it/zfm9mvgx1m171.jpg?width=1080&crop=smart&auto=webp&s=3ea9ad0ff3f3c6132fba85cb20afab61ff618ff8" alt="Slide 1" class="slide">
+                <img src="pics/86.jpg" alt="Slide 2" class="slide">
+                <img src="pics/85.jpg" alt="Slide 3" class="slide">
+                <img src="pics/84.jpg" alt="Slide 4" class="slide">
+                <img src="pics/1.jpeg" alt="Slide 5" class="slide">
+                <img src="https://media.siraplimau.com/2021/08/mangkuk.jpg" alt="Slide 6" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Laksa Sarawak</b> is a famous noodle dish from Sarawak, known for its rich and aromatic broth. Sarawak laksa has a unique base created from a mixture of sambal belacan (fermented prawn paste), lemongrass, galangal and other spices, combined with coconut milk and chicken or prawn broth.<br>
+        <br>It is typically served with:</p>
+        <p><b>Rice vermicelli (bee hoon)</b></p>
+        <p><b>Shredded chicken</b></p>
+        <p><b>Omelet strips</b></p>
+        <p><b>Prawns</b></p>
+        <p><b>Beansprouts</b></p>
+        <p><b>Coriander and lime for garnish</b></p>
+        <br>To improve the flavour, sambal belacan and lime are frequently served alongside. It tastes well-balanced, with rich umami flavours, a hint of tang, moderate spice, and a creamy texture from the coconut milk.<br>
+        <br>It's one of the must-try dishes when visiting Sarawak, particularly in Kuching!<br>
+        <br><br>
+        <h2>KOLO MEE</h2>
+        <div class="slider-container"> <!-- sec slider-->
+            <div class="slider">
+                <img src="pics/74.jpeg" alt="Slide 1" class="slide">
+                <img src="pics/88.jpg" alt="Slide 2" class="slide">
+                <img src="pics/87.jpg" alt="Slide 3" class="slide">
+                <img src="pics/44.jpeg" alt="Slide 4" class="slide">
+                <img src="https://images.deliveryhero.io/image/fd-my/LH/s3mk-listing.jpg" alt="Slide 5" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Mee kolo</b> or <b>kolo mee</b> is a Sarawakian meal made of dry noodles, a flavourful mixture of pork (or chicken or duck for a halal version), shallots, and fried onions. The dish is then covered with a clear sauce, or Red Kolo Mee – dyed red with char siu sauce.<br>
+        <br>In Sarawak, Kolo Mee is a popular breakfast or lunch meal that is especially well-known in Kuching for having some of the greatest quality. This tasty noodle dish is a favourite among both locals and tourists, and it's served in both traditional coffee shops and busy hawker stalls.</p>
+        <br><br>
+        <h2>MANOK PANSOH</h2>
+        <div class="slider-container"> <!-- third slider-->
+            <div class="slider">
+                <img src="https://assets.hmetro.com.my/images/articles/suh7_1714775417.jpg" alt="Slide 1" class="slide">
+                <img src="https://ikanmas.in/wp-content/uploads/2021/09/manokpansoh3.jpg" alt="Slide 2" class="slide">
+                <img src="https://aseanfoodtravel.com/wp-content/uploads/2023/01/ayampansoh.jpg" alt="Slide 3" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Manok Pansoh</b> or <b>Ayam Pansoh</b> is a traditional Iban and Bidayuh dish from Sarawak, featuring chicken cooked in a bamboo stalk, filled with water (which will later be the soup), seasonings and covered with tapioca leaves from the cassava plant over an open fire. The dish is infused with the natural aroma of the bamboo and enhanced with local herbs and spices, creating a uniquely smoky and fragrant flavor.<br>
+        <br>The natural bamboo infusion and lemongrass give the meal a somewhat sweet, smokey, and herbal flavour. It is usually eaten with steamed rice, which makes it an enjoyable and comforting meal.<br>
+        <br>In Sarawak, Manok Pansoh is often prepared for festivals, celebrations, and special occasions, particularly for the Iban and other indigenous groups.</p>
+        <br><br>
+        <h2>KEK LAPIS SARAWAK</h2>
+        <div class="slider-container"> <!-- fourth slider-->
+            <div class="slider">
+                <img src="https://www.vitdaily.com/app/uploads/2018/08/Kek-lapis-Sarawak.jpg" alt="Slide 1" class="slide">
+                <img src="https://apicms.thestar.com.my/uploads/images/2024/05/07/2679716.webp" alt="Slide 2" class="slide">
+                <img src="https://ikramtransports.com/wp-content/uploads/2023/02/Kek-Lapis-Sarawak-1024x1024.jpeg" alt="Slide 3" class="slide">
+                <img src="https://cdn.motherhood.com.my/wp-content/uploads/2021/04/19184721/5-different-layers.jpg" alt="Slide 4" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Kek Lapis Sarawak</b> or <b>Sarawak Layer Cake</b> is a traditional layered cake from Sarawak. It is known for its vibrant colors and intricate patterns, which are created by stacking thin layers of cake, often in geometric or artistic designs.<br>
+        <br>The cake is rich, moist, and typically flavored with ingredients like pandan, chocolate, vanilla, or spices. Kek Lapis Sarawak is commonly served during festive occasions like Hari Raya, Gawai, or special celebrations.<br>
+        <br>It can be found almost everywhere in Sarawak and a favourite gift bought by visitors as it is available all year around.</p>
+        <br><br>
+        <h2>UMAI</h2>
+        <div class="slider-container"> <!-- fifth slider-->
+            <div class="slider">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjEt48nnMiW2s2vUmLolK6b_v7utpmJGiNz8sUEB4OGsJZPDbAa5DK-Jde8TT-LsxuSST-bTuyWrBWF9NS-vHuo5Oi4nayfeK3yYAMtg6NuT4it86UCbDSBts-9iz-VUspAD-kbI-OhQ6c/w1200-h630-p-k-no-nu/DSC_0027-21.JPG" alt="Slide 1" class="slide">
+                <img src="https://lh3.googleusercontent.com/7Tt-PUOQE52e9bZ-YMCGHij4CjNUVBLCttO4aAAaFRmS4DKH10DWh_h-8cJa-_x8cCPnc0J9cj8jPXHIFnMTlNxpQaO4y7I-mDMKFWX9BM4CGxdS1SzeHkuiRV92cGAYOgq7Qyj-" alt="Slide 2" class="slide">
+                <img src="https://assets.nst.com.my/images/articles/6_slider1_1705911094.jpg" alt="Slide 3" class="slide">
+                <img src="https://i.redd.it/rgva3sf93a1c1.jpg" alt="Slide 4" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Umai</b> is a traditional Sarawakian dish, especially popular among the Melanau people.<br>
+        <br>It’s a type of raw fish salad, made with fresh raw fish (usually mackerel, prawns, or anchovies) that is thinly sliced and mixed with lime juice, onions, chilies, and salt. The acidity from the lime juice "cooks" the fish, giving it a tender texture and tangy flavor.</p>
+        <br><br>
+        <h2>DABAI</h2>
+        <div class="slider-container"> <!-- sixth slider-->
+            <div class="slider">
+                <img src="https://blogmardi.wordpress.com/wp-content/uploads/2017/02/dabai-1-rgb.jpg" alt="Slide 1" class="slide">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjMDv3clCB0XhBnF_wy6FifNcfNGOcGmF-PNwpZ3UX9KH3HXzCXh7Erpd8yYPO3zZcI3ElI-nZ3ZkiG7ShpmxAxSAArkpD8wiu5zbjY2wWmrSOMj55M0Bq4EqtDBEPldZSbEm9zWOkUIhS6/s400/P1190659.jpg" alt="Slide 2" class="slide">
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi7eTl3PlvXk1K-JAGHhNb8q1oUn2sIxFs38W52FVe0plfNifpnlv3WQFkXJmmKx-_zj04i5sTJWBRUe2ah7tu7PN_-MVEsHGvoGbr6Y8c5T9GGbtv7Crc1-u-AJMf2XUyhR-jig88njpA/s1600/dabai2.jpg" alt="Slide 3" class="slide">
+                <img src="https://preview.redd.it/234kyak1fws91.jpg?width=1080&crop=smart&auto=webp&s=ce4f66b445fe55bdb7c19679cf233ced8e5eb66e" alt="Slide 4" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Dabai</b>, or the scientific name, <b>Canarium odontophyllum</b> is a unique fruit native to Sarawak. Often called Sarawak olive, dabai looks like a small black olive with a yellowish flesh and a large seed inside. It has a rich, creamy texture and a slightly nutty, buttery taste when prepared properly.<br>
+        <br>Dabai is a seasonal fruit, highly prized in Sarawak, and can be expensive when in high demand.</p>
+        <br><br>
+        <h2>TUAK</h2>
+        <div class="slider-container"> <!-- 7th slider-->
+            <div class="slider">
+                <img src="https://media.thevibes.com/images/uploads/covers/_large/20230515-tuak_Dayak-AIR_TUAK_sarawak_fb.jpg" alt="Slide 1" class="slide">
+                <img src="https://images.says.com/uploads/story_source/source_image/1167244/3c11.jpg" alt="Slide 2" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Tuak</b> is a traditional rice wine from Sarawak, Malaysia, made by fermenting glutinous rice with yeast (ragi) and sometimes mixed with sugar or other ingredients. It is popular among the Iban and other indigenous communities of Sarawak, often brewed for festivals like Gawai Dayak (Harvest Festival), celebrations, and gatherings.<br>
+        <br>It has a sweet, mildly alcoholic taste when freshly brewed. Over time, as it ferments longer, it can become stronger and more sour. Some versions are infused with fruits, honey, or herbs for extra flavor.</p>
+        <br><br>
+        <h2>TEH C PENG SPECIAL</h2>
+        <div class="slider-container"> <!-- 7th slider-->
+            <div class="slider">
+                <img src="https://i.pinimg.com/736x/e6/10/2b/e6102b4a916ed514fdef7f6a8d8ca852.jpg" alt="Slide 1" class="slide">
+                <img src="https://noobcook.com/wp-content/uploads/2014/10/threelayertehcpeng.jpg" alt="Slide 2" class="slide">
+            </div>
+            <button class="prev-btn" id="prevBtn">&#10094;</button>
+            <button class="next-btn" id="nextBtn">&#10095;</button>
+        </div>
+        <p><b>Teh C Peng Special</b>  is a popular drink in Malaysia and Singapore, especially in Sarawak.<br>
+        <br>It's a three-layered iced tea made with:<br>
+        <p>1. <b>Gula Apong (Nipah Palm Sugar)</b> - A rich, caramel-like syrup at the bottom.</p>
+        <p>2. <b>Evaporated or Condensed Milk</b> - The middle creamy layer.</p>
+        <p>3. <b>Strong Black Tea</b> - The top layer, usually made from tea dust or local tea leaves.</p>
+        <br>When served, the drink shows distinct layers, but you mix it before drinking for a sweet, milky, and slightly smoky flavor from the gula apong. It's a favorite in kopitiams (coffee shops) and great for cooling down in hot weather!<br>
+
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+
+        document.querySelectorAll(".slider-container").forEach((container) => {
+        const slider = container.querySelector(".slider");
+        const slides = container.querySelectorAll(".slide");
+        const prevBtn = container.querySelector(".prev-btn");
+        const nextBtn = container.querySelector(".next-btn");
+
+        let index = 0;
+
+        function updateSlider() {
+            const offset = -index * 100;
+            slider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            index = (index - 1 + slides.length) % slides.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            index = (index + 1) % slides.length;
+            updateSlider();
+        });
+
+        updateSlider(); // Initialize slider position
+    });
+    </script>
+</body>
+</html>

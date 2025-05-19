@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Image Slider */
+        .slider-container {
+            width: 50%; /* Adjust width as needed */
+            max-width: 350px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Bottom Navigation Buttons */
+        .bottom-navigation {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f5f0e1; /* Match body background or choose another */
+        }
+
+        .bottom-btn {
+            display: inline-block;
+            background-color: #a27943; /* Dark button */
+            color: #f5f0e1; /* Light text */
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .bottom-btn:hover {
+            background-color: #e4a81d; /* Golden yellow on hover */
+            color: #a27943;
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        table { /* The operating hours table */
+            margin: 0 auto;  /* This will center the table */
+            border-collapse: collapse;  /* Optional: makes the table look cleaner */
+            width: 50%;  /* Optional: you can set a percentage width */
+        }
+        th, td {
+            padding: 10px;  /* Adds space inside the cells */
+            border: 1px solid black;
+            text-align: center;  /* Centers the text inside the cells */
+        }
+
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+
+         /* Sarawak Map */
+         #mapContainer {
+            display: none; /* start with the map hidden */
+        }       
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            </li>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <div class="slider-container"> <!-- first slider on top-->
+        <div class="slider">
+            <img src="https://myhometown.com.my/wp-content/uploads/2020/10/Aerial-view-of-Sibu-City-Skyline-with-Temple.jpg" alt="Slide 1" class="slide">
+            <img src="https://sarawakgo.com/wp-content/uploads/2022/08/image001.jpg" alt="Slide 2" class="slide">
+            <img src="https://cassette.sphdigital.com.sg/image/straitstimes/6181f85c57296e2d756b5f178089ee7e295ef6fde2898abd3e5c9dd1a3988306" alt="Slide 3" class="slide">
+        </div>
+        <button class="prev-btn" id="prevBtn">&#10094;</button>
+        <button class="next-btn" id="nextBtn">&#10095;</button>
+    </div>
+
+    <main>
+        <h1>Welcome to Sibu, Sarawak</h1>
+        <p>Sibu is a major town in central Sarawak, Malaysia, located along the Rajang River. It is the administrative and commercial center of the Sibu Division and is known for its historical significance, especially as a hub for the Chinese community.<br>
+        <br>The town has a mix of modern infrastructure and traditional elements, offering a glimpse into the cultural and economic life of Borneo. Sibu is famous for its food scene, notably its kampua noodles and sibu-style laksa. Here are some must-visit destinations in and around Sibu:</p>
+        <div style="height: 2300px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+            <h2>BUKIT AUP JUBILEE PARK</h2>
+            <div class="slider-container"> <!-- second slider-->
+                <div class="slider">
+                    <img src="https://gowhere.my/wp-content/uploads/2016/01/Bukit-Aup-Jubilee-Park-e1452159931919.jpg" alt="Slide 1" class="slide">
+                    <img src="https://www.visitsibu.com/wp-content/uploads/2012/09/bukit-aup-jubilee-park-24.jpg" alt="Slide 2" class="slide">
+                    <img src="https://i0.wp.com/dayakdaily.com/wp-content/uploads/2023/03/photo_2023-03-28_19-46-33.jpg?resize=696%2C522&ssl=1" alt="Slide 3" class="slide">
+                    <img src="https://gowhere.my/wp-content/uploads/2016/01/Bukit-Aup-Jubilee-Park-1-e1452159927281.jpg" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Bukit Aup, a 24-acre group of low hills with an observation tower providing views of the nearby plantations, longhouses, and the Igan River, was the winner of the 1998 National Landscaping Competition for Public Parks.<br>
+            <br>Local Ibans frequently visit the tower, which is situated atop the park's highest peak, to present offerings to the Naga Bari, a kind spirit thought to assist those in need. The park has jogging and walking routes, picnic pavilions, a cafeteria, and a suspension bridge over a small lake that makes for nice photo ops.<br>
+            <br><b>OPERATING HOURS :</b> During the day<br></p>
+            <br><br>
+            <br><h2>REJANG RIVER CRUISE</h2>
+            <div class="slider-container"> <!-- third slider-->
+                <div class="slider">
+                    <img src="https://www.prowsedge.com/images/articles/pandaw-borneo-1.jpg" alt="Slide 1" class="slide">
+                    <img src="https://d2kihw5e8drjh5.cloudfront.net/eyJidWNrZXQiOiJ1dGEtaW1hZ2VzIiwia2V5IjoicGxhY2VfaW1nL2M3MGY1ZTNjMDUwMTRlYzM4MTYxMDA2OGM4NjNkNjI5IiwiZWRpdHMiOnsicmVzaXplIjp7IndpZHRoIjo2NDAsImhlaWdodCI6NjQwLCJmaXQiOiJpbnNpZGUifSwicm90YXRlIjpudWxsLCJ0b0Zvcm1hdCI6ICJ3ZWJwIn19" alt="Slide 2" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Meet and head to the dock for the speedboat ride along Malaysia's longest river, the Rejang. The river is the longest in Malaysia, flowing around 640 km to the South China Sea.<br>
+            <br>The stunning Sibu town and the hundred-year-old temples [the Tua Pek Kong Temple] and [7-the Storey Pagoda] next to the Rejang river may be seen from the river. The typical Malay still house will be traversed by the ship. There are numerous shipbuilding factories along the Rejang River's shore. In addition, homes and factories along the river may be seen. After that, take the same ship back to Sibu Wharf and check into your hotel.<br>
+            <br><b>OPERATING HOURS :</b> Duration 1-2 hours daily
+            <br><br>
+            <br><h2>SIBU CENTRAL MARKET</h2>
+            <div class="slider-container"> <!-- fourth slider-->
+                <div class="slider">
+                    <img src="https://www.theborneopost.com/newsimages/2021/02/pb-market-p.gif" alt="Slide 1" class="slide">
+                    <img src="https://www.visitsibu.com/wp-content/uploads/2012/09/sibu-central-market-026.jpg" alt="Slide 2" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>The Sibu Central Market is the largest and most interesting in Sarawak, as well as Malaysia's largest indoor market, with thousands of stores selling everything imaginable. Highlights include Iban ladies selling exotic fruits, jungle produce, and handicrafts, as well as Chinese poultry sellers offering live chickens and ducks neatly wrapped in tubes made of old newspapers.<br>
+            <br><b>OPERATING HOURS :</b> All day<br></p>
+            <br><br>
+            <br><h2>TUA PEK KONG TEMPLE</h2>
+            <div class="slider-container"> <!-- third slider-->
+                <div class="slider">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/10/a0/05/60/screenshot-2017-09-11.jpg?w=1200&h=-1&s=1" alt="Slide 1" class="slide">
+                    <img src="https://i0.wp.com/dayakdaily.com/wp-content/uploads/2021/02/temple-e1613028797767.jpg?resize=696%2C522&ssl=1" alt="Slide 2" class="slide">
+                    <img src="https://www.visitsibu.com/wp-content/uploads/2012/09/tua-pek-tong-008.jpg" alt="Slide 3" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Eng Ann Tua Pek Kong Temple in Sibu, established in the 1890s, has been the area's oldest and finest preserved Chinese temple for almost a century. Originally constructed of wood, the temple was rebuilt in 1897 with elements brought from China, including the figure of Lord Tua Pek Kong. Now, the temple proudly displays the splendor of traditional Taoist architecture.<br>
+            <br><b>OPERATING HOURS :</b> Any time<br></p> 
+       </div>
+    </main>
+
+    <div class="bottom-navigation">
+         <a href="kuching.html" class="bottom-btn">Explore Kuching</a>
+         <a href="miri.html" class="bottom-btn">Explore Miri</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+
+        document.querySelectorAll(".slider-container").forEach((container) => {
+        const slider = container.querySelector(".slider");
+        const slides = container.querySelectorAll(".slide");
+        const prevBtn = container.querySelector(".prev-btn");
+        const nextBtn = container.querySelector(".next-btn");
+
+        let index = 0;
+
+        function updateSlider() {
+            const offset = -index * 100;
+            slider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            index = (index - 1 + slides.length) % slides.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            index = (index + 1) % slides.length;
+            updateSlider();
+        });
+
+        updateSlider(); // Initialize slider position
+    });
+    </script>
+</body>
+</html>

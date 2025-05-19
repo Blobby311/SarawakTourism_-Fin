@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarawak Forum</title>
+    <link rel="stylesheet" href="css/forumstyle.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="navbar-brand">SwkForum</div>
+        <nav class="navbar-nav">
+            <button id="createPostBtn" class="nav-button">Create Post</button>
+            <button id="notificationsBtn" class="nav-button">
+                Notifications <span id="notification-count" class="notification-badge" style="display: none;">0</span>
+            </button>
+            <button id="logoutBtn" class="nav-button">Logout</button>
+        </nav>
+        <div id="notificationsDropdown" class="dropdown-content" style="display: none;">
+            <p>No new notifications.</p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div id="createPostModal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button" id="closeModalBtn">&times;</span>
+                <h2>Create New Post</h2>
+                <input type="text" id="postTitleInput" placeholder="Post Title">
+                <textarea id="postContentInput" placeholder="What's on your mind?"></textarea>
+                <button id="submitPostBtn">Submit Post</button>
+            </div>
+        </div>
+
+        <section id="postFeed">
+            <h2>SwkThoughts</h2>
+            <!-- Posts will be rendered here by JS -->
+        </section>
+
+    </main>
+
+    <script src="js/forumscript.js"></script>
+</body>
+</html>

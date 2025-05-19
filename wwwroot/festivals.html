@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .image-row { /* for images */
+            display: flex;
+            justify-content: center; /* or space-between / space-around */
+            gap: 20px; /* spacing between images */
+            margin-top: 50px;
+            align-items: flex-start;
+        }
+
+        .side-image {
+            max-width: 280px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 8px;
+        }
+
+
+        /* Image Slider */
+        .slider-container {
+            width: 70%; /* Adjust width as needed */
+            max-width: 300px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+
+        /* Sarawak Map */
+        #mapContainer {
+            display: none; /* start with the map hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div style="height: 2980px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+        <h1>Festivals in Sarawak</h1>
+        <p>Sarawak is a land of rich traditions and diverse cultures, where vibrant festivals bring communities together in celebration. These events showcase the unique heritage, music, dance, and rituals of the region, offering visitors an immersive cultural experience. From lively gatherings to deep-rooted traditions, Sarawak's festivals reflect the spirit and unity of its people.</p>
+        <br><br>    
+        <h2>GAWAI DAYAK FESTIVAL</h2>
+        <div class="image-row">
+            <img src="https://sgs.upm.edu.my/summer-uploads/20220616164633blobid0.jpg" alt="Gawai1" class="side-image">
+            <img src="https://www.malaysiavisa.ae/blog/wp-content/uploads/2023/01/Sarawak-Gawai-festival-rituals.jpg" alt="Gawai2" class="side-image">
+            <img src="https://museumvolunteersjmm.com/wp-content/uploads/2021/08/gawai.jpg" alt="Gawai3" class="side-image">
+        </div>
+        <br><br>
+        <p><b>Gawai Dayak</b> is a harvest festival celebrated by the Dayak people of Sarawak, Malaysia, and West Kalimantan, Indonesia. It is held annually on June 1st and 2nd to mark the end of the rice harvesting season and to give thanks for a bountiful harvest while praying for future prosperity.<br>
+        <br>The festival includes traditional rituals, ngajat (a warrior dance), music, feasting, and drinking tuak (rice wine). Families gather to honor ancestors, perform blessings, and partake in communal festivities.<br>
+        <br>Initially rejected as a public holiday during colonial rule, it was officially recognized in 1965. Today, Gawai Dayak remains a vibrant celebration of indigenous identity and heritage.</p>
+        <br><br>
+        <h2>PESTA KAUL</h2>
+        <div class="image-row">
+            <img src="https://www.rakansarawak.com/v3/wp-content/uploads/2022/08/RO-1-06-60-2022.jpeg" alt="PestaKaul1" class="side-image">
+            <img src="https://www.worldheritage.com.my/wp-content/plugins/RSSPoster_PRO/cache/c3581_pesta-kaul-3.jpg" alt="PestaKaul2" class="side-image">
+            <img src="https://www.theborneopost.com/newsimages/2023/03/IMG_2569.jpg" alt="PestaKaul3" class="side-image">
+        </div>
+        <br><br>
+        <p><b>Pesta Kaul</b> or <b>Kaul Festival</b> is a traditional Melanau festival celebrated in Sarawak, Malaysia, marking the end of the monsoon season and seeking blessings for the year ahead. It is typically held in April and involves offerings placed on a <b>seraheng</b> (decorated ceremonial raft) to appease spirits and ensure prosperity.<br>
+        <br>The festival features traditional rituals, music, dance, games, and feasting, with highlights like the Tibou, a giant swing symbolizing unity and strength. Once a solemn religious ritual, Kaul has evolved into a cultural event showcasing Melanau heritage while preserving its spiritual significance.</p>
+        <br><br>
+        <h2>RAINFOREST WORLD MUSIC FESTIVAL</h2>
+        <div class="image-row">
+            <img src="https://res.klook.com/images/fl_lossy.progressive,q_65/c_fill,w_1295,h_863/w_80,x_15,y_15,g_south_west,l_Klook_water_br_trans_yhcmh3/activities/xz9nv6m4w8qohwxxdkem/RainforestWorldMusicFestival2024ExperienceinSarawak.jpg" alt="RWMF1" class="side-image">
+            <img src="https://s3.amazonaws.com/tunehotels/rainforestworldmusicfestivalrwmf2012day3finalesmall-1582458304964.jpg" alt="RWMF2" class="side-image">
+            <img src="https://www.intrepidtravel.com/adventures/wp-content/uploads/2017/11/IMG_3309-e1511811683103.jpg" alt="RWMF3" class="side-image">
+        </div>
+        <br><br>
+        <p>The Rainforest World Music Festival (RWMF) is an <b>annual three-day music festival</b> held in Sarawak Cultural Village, Malaysia.<br>
+        <br>Established in 1998, it celebrates world music, featuring a mix of traditional and contemporary sounds from global and indigenous musicians. The festival includes live performances, cultural workshops, dance, and interactive sessions, set against the backdrop of the Borneo rainforest. It attracts thousands of music enthusiasts and promotes cultural diversity, heritage preservation, and eco-tourism.<br>
+        <br>RWMF is one of Asia’s most renowned music festivals, blending nature, music, and indigenous traditions.</p>
+        <br><br>
+        <h2>SARAWAK REGATTA</h2>
+        <div class="image-row">
+            <img src="https://suarasarawak.my/wp-content/uploads/2023/10/regata-satawak-optimized.jpg" alt="REGATTA1" class="side-image">
+            <img src="https://www.theborneopost.com/newsimages/2023/11/Kch-051123-nsa-regatta2023-p5.jpg" alt="REGATTA2" class="side-image">
+        </div>
+        <br><br>
+        <p>The <b>Sarawak Regatta</b> is an annual boat race held on the Sarawak River in Kuching, Malaysia.<br>
+        <br>Dating back to the 19th century, it was introduced by the Brooke administration to promote peace among warring tribes through friendly competition. The event features traditional longboat races, with teams paddling in unison to win the coveted <b>"Raja Sungai"</b> (King of the River) title.<br>
+        <br>It also includes cultural performances, exhibitions, and water sports, attracting both locals and tourists. The regatta remains a symbol of unity, history, and Sarawak’s rich maritime heritage.</p>
+        <br><br>
+        <h2>BORNEO JAZZ FESTIVAL</h2>
+        <div class="image-row">
+            <img src="https://assets.nst.com.my/images/articles/olsbnjzftms001a.jpg_1653963454.jpg" alt="JAZZ1" class="side-image">
+            <img src="https://asianjourneys.com.sg/digital_images/large/2021-06-28/16th-edition-of-borneo-jazz-festival-records-new-highs-1624861198-1268.jpg" alt="JAZZ2" class="side-image">
+        </div>
+        <br><br>
+        <p>The Borneo Jazz Festival is an annual music event held in <b>Miri, Sarawak, Malaysia,</b> celebrating jazz music with international and local artists.<br>
+        <br>Established in 2006, it aims to promote jazz culture while boosting tourism in Borneo. The festival features diverse jazz styles, from traditional to contemporary fusion, along with music workshops, jam sessions, and cultural exhibitions.<br>
+        <br>Set against a scenic coastal backdrop, it attracts music lovers worldwide, making it one of the premier jazz festivals in Southeast Asia.</p>           
+    </main>
+
+    <footer>
+            <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

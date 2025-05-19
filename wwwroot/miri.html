@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Image Slider */
+        .slider-container {
+            width: 50%; /* Adjust width as needed */
+            max-width: 350px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Bottom Navigation Buttons */
+        .bottom-navigation {
+            text-align: center;
+            padding: 30px 0;
+            background-color: #f5f0e1; /* Match body background or choose another */
+        }
+
+        .bottom-btn {
+            display: inline-block;
+            background-color: #a27943; /* Dark button */
+            color: #f5f0e1; /* Light text */
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 10px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .bottom-btn:hover {
+            background-color: #e4a81d; /* Golden yellow on hover */
+            color: #a27943;
+            transform: translateY(-2px); /* Slight lift effect */
+        }
+
+        table { /* The operating hours table */
+            margin: 0 auto;  /* This will center the table */
+            border-collapse: collapse;  /* Optional: makes the table look cleaner */
+            width: 50%;  /* Optional: you can set a percentage width */
+        }
+        th, td {
+            padding: 10px;  /* Adds space inside the cells */
+            border: 1px solid black;
+            text-align: center;  /* Centers the text inside the cells */
+        }
+
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+        /* Sarawak Map */
+        #mapContainer {
+            display: none; /* start with the map hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>  
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            </li>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <div class="slider-container"> <!-- first slider on top-->
+        <div class="slider">
+            <img src="https://lp-cms-production.imgix.net/2022-03/iStock-1156856018%20RFC.jpg?w=1095&fit=crop&crop=faces%2Cedges&auto=format&q=75" alt="Slide 1" class="slide">
+            <img src="https://image.deemples.com/wp-content/uploads/2019/07/golf-courses-in-miri-sarawak.jpg" alt="Slide 2" class="slide">
+            <img src="https://cdn.thecrazytourist.com/wp-content/uploads/2019/04/ccimage-shutterstock_1285337794.jpg" alt="Slide 3" class="slide">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEgTpKKVfT69E57I7WX-fEGxcz2_tjs3GqaMx5vXs7pVBdD_wkh1c10Gima_KBl4JLIsTJJqFyvE1h4IBLdVssThjsZXwRmjV6dqrHxumtSLVpeEuxYmuhl-xCvw5lkbxqGTomsIcC4TEvcB/s1080/esplanade+%25281%2529.jpg" alt="Slide 4" class="slide">
+        </div>
+        <button class="prev-btn" id="prevBtn">&#10094;</button>
+        <button class="next-btn" id="nextBtn">&#10095;</button>
+    </div>
+
+    <main>
+        <h1>Welcome to Miri, Sarawak</h1>
+        <p>Miri is a city located in the northern part of Sarawak, Malaysia, on the island of Borneo. It is the second-largest city in Sarawak, after Kuching, and serves as a key gateway for travelers exploring the region. Miri is well known for its rich history, particularly in the oil and gas industry, as the first commercial oil field in Malaysia was discovered here in 1910.<br>
+        <br>Miri offers a variety of must-visit destinations for nature lovers, history enthusiasts, and those seeking unique experiences. Here are some top spots:</p>
+        <div style="height: 2870px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+            <h2>CANADA HILL & GRAND OLD LADY</h2>
+            <div class="slider-container"> <!-- second slider-->
+                <div class="slider">
+                    <img src="https://i0.wp.com/www.gayatravel.com.my/ver4/wp-content/uploads/2023/06/The-Miri-city-signage-located-on-top-of-Canada-Hill.jpg?fit=1900%2C1425&ssl=1" alt="Slide 1" class="slide">
+                    <img src="https://aquestatravel.com/wp-content/uploads/2023/03/Best-Things-To-Do-When-You-Come-to-Miri-Sarawak.jpg" alt="Slide 2" class="slide">
+                    <img src="https://asianitinerary.com/wp-content/uploads/2015/09/Grand-Old-Lady-in-action.jpg" alt="Slide 3" class="slide">
+                    <img src="https://asianitinerary.com/wp-content/uploads/2015/09/The-Nodding-Donkey-2.jpg" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>The grand old lady may be seen in Miri, the second-biggest state in Sarawak, East Malaysia, on Canada Hill. The first oil well was drilled on Canada Hill, which the locals refer to as Bukit Telaga Minyak.<br>
+            <br>An actual old lady is not what the Grand Old Lady is. It was the Shell Company's first oil well drilled in Miri, and it was completed in 1910. In the perspective of the locals and undoubtedly the rest of the world, it is one of Miri's several major points of interest and serves as a significant landmark.</p>
+            <br><br>
+            <br><h2>COCO CABANA & SEAHORSE LIGHTHOUSE</h2>
+            <div class="slider-container"> <!-- third slider-->
+                <div class="slider">
+                    <img src="https://www.miriresortcity.com/sites/default/files/cococabana2.jpg" alt="Slide 1" class="slide">
+                    <img src="https://www.sarawaktravellers.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F7m2vvveu%2Fproduction%2Fe06c5c7e21130dcdfda32c536c7c79f89431238a-4032x2268.jpg&w=3840&q=75" alt="Slide 2" class="slide">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/18/fa/95/15/sea-horse-at-coco-cabana.jpg?w=900&h=500&s=1" alt="Slide 3" class="slide">
+                    <img src="https://lh3.googleusercontent.com/N88Wb0lm-mtkctJWX4wLQp5a-Lzs6kfNh3cBdTRcLQlhyBfoRwZHALBeOQ59Q3-PsrmTyeQ5VKf-X2bPdcSslwGfz-l0IqwRkH8crmGRhg6BgBUn5tydIdhQTrCdiLikOmO9oLAqig=h480" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Mirians have a particular place in their hearts for Coco Cabana, a well-liked spot close to Marina Park. Known for its breathtaking sunset views, it's a popular destination for couples, families, and friends to spend time together while strolling along picturesque walks or lounging on wooden decks while listening to the calming sounds of the waves lapping against the rocks.<br>
+            <br>You can anticipate seeing a range of food vendors beside the main wooden building on the special occasions when they are open. Several emerging companies will also be showcasing their goods and services inside that wooden structure. However, keep in mind that these offerings change according to the time of year and the occasion, so the sellers will not be the same on every visit.</p>
+            <br><br>
+            <br><h2>LAMBIR HILLS NATIONAL PARK</h2>
+            <div class="slider-container"> <!-- fourth slider-->
+                <div class="slider">
+                    <img src="https://www.holidaygogogo.com/wp-content/uploads/2012/08/Lambir-Hills-National-Park-entrance.jpg" alt="Slide 1" class="slide">
+                    <img src="https://www.alltrails.com/_next/image?url=https%3A%2F%2Fimages.alltrails.com%2FeyJidWNrZXQiOiJhc3NldHMuYWxsdHJhaWxzLmNvbSIsImtleSI6InVwbG9hZHMvcGhvdG8vaW1hZ2UvOTI5NTI2MTMvNmYwMGNiNTY5OTRhOWM1OTZlZTkzZWIyYmVhOGVmNzMuanBnIiwiZWRpdHMiOnsidG9Gb3JtYXQiOiJ3ZWJwIiwicmVzaXplIjp7IndpZHRoIjoxMDgwLCJoZWlnaHQiOjcwMCwiZml0IjoiY292ZXIifSwicm90YXRlIjpudWxsLCJqcGVnIjp7InRyZWxsaXNRdWFudGlzYXRpb24iOnRydWUsIm92ZXJzaG9vdERlcmluZ2luZyI6dHJ1ZSwib3B0aW1pc2VTY2FucyI6dHJ1ZSwicXVhbnRpc2F0aW9uVGFibGUiOjN9fX0%3D&w=3840&q=90" alt="Slide 2" class="slide">
+                    <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/06/75/99/57.jpg" alt="Slide 3" class="slide">
+                    <img src="https://www.globetrove.com/wp-content/uploads/2019/05/the-longer-trails-in-Lambir-hills-national-park.jpg.webp" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Visitors from all walks of life are welcomed by the complex yet captivating jungle pathways, which provide the chance to fully immerse oneself in the natural rainforest.<br>
+            <br>The four-hour hike to the 465-meter peak of Bukit Lambir will be a rewarding climb for experienced and daring nature lovers, who will be greeted by its superb view of the surrounding and below rainforest. For first-timers, the 15-minute walk to the famous Latak Waterfall will open their eyes to a new adventure. A swim in the refreshing pool waters from the waterfall that cascades from Lambir Hills will revitalize your mind, body, and spirit after a long and taxing travel!<br>
+            <br><b>OPERATING HOURS :</b> Monday - Sunday (8:00 AM - 5:00 PM)<br></p>
+            <br><br>
+            <br><h2>NIAH CAVES NATIONAL PARKS</h2>
+            <div class="slider-container"> <!-- fifth slider-->
+                <div class="slider">
+                    <img src="https://i0.wp.com/borneoadventure.com/v3/wp-content/uploads/2012/01/niah-caves.jpg?resize=1200%2C952&quality=60&strip=all" alt="Slide 1" class="slide">
+                    <img src="https://paradesaborneo.com/wp-content/uploads/2024/08/Niah-cave-1.jpg" alt="Slide 2" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Because people lived there at least 40 thousand years ago, Niah Great Cave has 40,000 years of unwritten history. Some of the oldest human remains found in Southeast Asia can be found in the caves. There will be other people visiting this amazing cave besides you. The native Penan tribesmen live there and work gathering edible bird nests that swiftlets have erected high in the cave walls. Chinese gourmets all over the world value the birds' nests.<br>
+            <br><b>OPERATING HOURS :</b> Monday - Sunday (8:00 AM - 3:00PM)<br></p>
+            <br><br>   
+            <br><h2>TUSAN BEACH</h2>
+            <div class="slider-container"> <!-- sixth slider-->
+                <div class="slider">
+                    <img src="https://i0.wp.com/dayakdaily.com/wp-content/uploads/2021/01/tusan-1_copy_720x540.jpg?fit=720%2C540&ssl=1" alt="Slide 1" class="slide">
+                    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/0c/91/79/c1/part-of-tusan-beach.jpg?w=900&h=500&s=1" alt="Slide 2" class="slide">
+                    <img src="https://gowhere.my/wp-content/uploads/2015/12/Tusan-Beach-2-e1451381478681.jpg" alt="Slide 3" class="slide">
+                    <img src="https://sandee.com/_next/image?url=https%3A%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipPfOWeoTEL65CG5wTEaPdybEfL90nrwwgMiiTsM%3Ds1600-k-no&w=3840&q=75" alt="Slide 4" class="slide">
+                </div>
+                <button class="prev-btn" id="prevBtn">&#10094;</button>
+                <button class="next-btn" id="nextBtn">&#10095;</button>
+            </div>
+            <p>Tusan Beach, which is around 40 minutes from Miri, has recently become a very popular tourist destination. In late 2015, the "blue tears" phenomena was found on the sands of Tusan Beach, which is located in the small town of Bekenu. The bioluminescence of plankton creatures in the water, which is stopped by oxygen to produce a beautiful blue light, is what causes the cinematic blue tears.<br>
+            <br>Kite flying, picnics, and sunbathing are all made possible by the long, sandy beach. You can discover unusual geological features including tiny caverns and intriguing rock formations like horse head rock while strolling along the shore.</p>
+       </div>
+    </main>
+
+    <div class="bottom-navigation">
+         <a href="kuching.html" class="bottom-btn">Explore Kuching</a>
+         <a href="sibu.html" class="bottom-btn">Explore Sibu</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+
+    <script>
+
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+
+        document.querySelectorAll(".slider-container").forEach((container) => {
+        const slider = container.querySelector(".slider");
+        const slides = container.querySelectorAll(".slide");
+        const prevBtn = container.querySelector(".prev-btn");
+        const nextBtn = container.querySelector(".next-btn");
+
+        let index = 0;
+
+        function updateSlider() {
+            const offset = -index * 100;
+            slider.style.transform = `translateX(${offset}%)`;
+        }
+
+        prevBtn.addEventListener("click", () => {
+            index = (index - 1 + slides.length) % slides.length;
+            updateSlider();
+        });
+
+        nextBtn.addEventListener("click", () => {
+            index = (index + 1) % slides.length;
+            updateSlider();
+        });
+
+        updateSlider(); // Initialize slider position
+    });
+    </script>
+</body>
+</html>

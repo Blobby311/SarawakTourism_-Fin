@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Sarawak</title>
+    <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f0e1; /* Light tan background like image */
+            color: #333;
+            padding-top: 60px; /* Prevent content from hiding behind fixed navbar */
+        }
+
+        /* Navigation Bar */
+        #navbar {
+            background-color: #a27943; /* Dark brown from image */
+            position: fixed; /* Sticks to the top */
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000; /* Ensures navbar stays on top */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        #navbar ul {
+            list-style: none;
+            display: flex;
+            justify-content: center; /* Center navigation items */
+            padding: 10px 0;
+        }
+
+        #navbar ul li {
+            position: relative; /* Needed for dropdown positioning */
+        }
+
+        #navbar ul li a {
+            color: #333333; /* Light text on dark background */
+            text-decoration: none;
+            padding: 15px 20px;
+            display: block;
+            transition: background-color 0.3s ease;
+        }
+
+        #navbar ul li a:hover,
+        #navbar ul li:hover .dropbtn { /* Highlight on hover */
+            background-color: #e4a81d; /* Golden yellow accent */
+            color: #6b4f4f; /* Dark text on hover */
+        }
+
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f5f0e1; /* Light background for dropdown */
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            top: 100%; /* Position below the parent */
+            left: 0;
+        }
+
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: #333; /* Dark text for dropdown links */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .image-row { /* for images */
+            display: flex;
+            justify-content: center; /* or space-between / space-around */
+            gap: 20px; /* spacing between images */
+            margin-top: 50px;
+            align-items: flex-start;
+        }
+
+        .side-image {
+            max-width: 280px;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            flex-shrink: 0;
+            border-radius: 8px;
+        }
+
+
+        /* Image Slider */
+        .slider-container {
+            width: 70%; /* Adjust width as needed */
+            max-width: 300px;
+            margin: 20px auto; /* Center the slider */
+            overflow: hidden; /* Hides the parts of images that are outside the container */
+            position: relative; /* For positioning buttons */
+            border: 3px solid #a27943; /* Border like the image */
+            border-radius: 8px;
+        }
+
+        .slider {
+            display: flex;
+            transition: transform 0.5s ease-in-out; /* Animation for sliding */
+        }
+
+        .slide {
+            min-width: 100%; /* Each image takes full container width */
+            object-fit: cover; /* Covers the area without distortion */
+            display: block; /* Remove extra space below image */
+            /* Ensure images have a defined height if needed */
+            /* height: 400px; */ /* Example height, adjust or remove */
+        }
+
+        /* Slider Navigation Buttons */
+        .prev-btn,
+        .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            background-color: #a2794300;
+            border: none;
+            user-select: none; /* Prevents selecting text */
+            border-radius: 0 3px 3px 0; /* Slight rounding */
+            transition: background-color 0.3s ease;
+            z-index: 5; /* Ensure buttons are above images */
+        }
+
+        .prev-btn {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .prev-btn:hover,
+        .next-btn:hover {
+            background-color: #a279438c;
+        }
+
+        /* Main Content Area */
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto; /* Center main content */
+        }
+
+        main h1 {
+            color: #a27943;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #a27943;
+            color: #f5f0e1;
+            font-size: 0.9em;
+        }
+
+        /* Sarawak Map */
+        #mapContainer {
+            display: none; /* start with the map hidden */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="mapContainer">
+        <iframe id="mapIframe" width="640" height="480"></iframe>
+    </div>
+
+    <nav id="navbar">
+        <ul>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">About Sarawak</a>
+                <div class="dropdown-content">
+                    <a href="history.html">History</a>
+                    <a href="indigenous.html">Indigenous Groups</a>
+                    <a href="festivals.html">Festivals</a>
+                    <a href="food.html">Food & Drinks</a>
+                    <a href="kuching.html">Explore Sarawak</a>
+                </div>
+            <li><a href="https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F">Sarawak Map</a></li>
+            <li><a href="forum.html">Forum</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <div style="height: 2405px; background-color: #f0ead6; padding: 20px; margin-top: 20px; border-radius: 8px; border: 1px solid #ccc;">
+        <h1>Indigenous Groups in Sarawak</h1>
+        <p>Sarawak is home to over 40 indigenous groups, each with its own unique traditions, languages, and lifestyles. The major indigenous communities include the <b>Iban, Bidayuh, Melanau</b> and <b>Orang Ulu</b>, alongside smaller but equally significant groups.<br>
+        <br>The indigenous groups in Sarawak are collectively known as the <b>Orang Asal</b> (meaning "original people") and make up a significant portion of the state's population.</p>
+        <br><br>    
+        <h2>IBAN (SEA DAYAK)</h2>
+        <div class="image-row">
+            <img src="https://storage.googleapis.com/ouchfree-production/ouch-blog/2024/05/Image-from-Google-Photos.jpg" alt="IbanCostume1" class="side-image">
+            <img src="https://www.tsemrinpoche.com/wp-content/uploads/2016/11/Gawai019.jpg" alt="IbanCostume2" class="side-image">
+        </div>
+        <br><br>
+        <p>Iban is the largest ethnic group in Sarawak, making up around 30% of the population. They are historically known as fearsome headhunters, but now famous for their longhouses, weaving (pua kumbu), and traditional tattoos.<br>
+        <br><br>
+        <h2>BIDAYUH (LAND DAYAK)</h2>
+        <div class="image-row">
+            <img src="https://i.pinimg.com/736x/6c/63/71/6c637188b004b2f86ef72c204e4e2a1d.jpg" alt="BidayuhCostume1" class="side-image">
+            <img src="https://assets.nst.com.my/images/articles/Rejang_Beuh3_1705552425.jpg" alt="BidayuhCostume2" class="side-image">
+        </div>
+        <br><br>
+        <p>Bidayuh is primarily located in Kuching and Serian divisions. They are known for their bamboo-based architecture, farming, and hospitality. Their traditional <b>baruk</b> (round houses) were used for meetings and ceremonies. The Bidayuh celebrate <b>Gawai Sowa</b> (a thanksgiving festival) and maintain strong ties to their land and traditions. They have multiple dialects, but Bidayuh languages are distinct from Iban and Malay.</p>
+        <br><br>
+        <h2>MELANAU</h2>
+        <div class="image-row">
+            <img src="https://www.theborneopost.com/newsimages/2017/07/C_PC0024455.jpg" alt="Melanauostume1" class="side-image">
+            <img src="https://media.freemalaysiatoday.com/wp-content/uploads/2020/08/orang-Melanau-bernama20082020.jpg" alt="MelanauCostume2" class="side-image">
+        </div>
+        <br><br>
+        <p>Melanau traditionally lived along coastal areas (Mukah, Dalat, Bintulu). They are historically fishermen and sago farmers. Some of them are still practicing Kaul Festival, an ancient ritual to appease spirits. Unlike other indigenous groups, some Melanau were among the earliest to convert to Islam, while others remain Christian or animist.</p>
+        <br><br>
+        <h2>ORANG ULU (UPRIVER PEOPLE)</h2>
+        <div class="image-row">
+            <img src="https://www.theborneopost.com/newsimages/2017/05/kch-bp020517-cas-kayan-p2.jpg" alt="OrangUluCostume1" class="side-image">
+            <img src="https://orangulumixedblood.wordpress.com/wp-content/uploads/2013/06/img_8925.jpg" alt="OrangUluCostume2" class="side-image">
+        </div>
+        <br><br>
+        <h3>Kayan</h3>
+        <p>They are skilled in boat-making and beadwork. They once practiced headhunting but are now known for their fine wood carvings.</p>
+        <br><h3>Kenyah</h3>
+        <p>Kenyah is known for their intricate tattoos, elongated earlobes, and beadwork. They are famous for sape music, a traditional lute-like instrument.</p>
+        <br><h3>Kelabit</h3>
+        <p>Kelabit is one of the smallest indigenous groups, residing in the highlands of Bario. They are famous for their wet paddy farming and salt production.</p>
+        <br><h3>Penan</h3>
+        <p>Penan are traditionally nomadic hunter-gatherers, but many have settled in villages. They are expert in blowpipe hunting and jungle survival. They are also one of the last groups advocating for rainforest conservation.</p>            
+    </main>
+
+    <footer>
+            <p>&copy; 2025 Sarawak Tourism. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Map
+        function showMap() {
+            var iframe = document.getElementById('mapIframe');
+            iframe.src = "https://www.google.com/maps/d/embed?mid=11sfKynbOSyN_zZnZ-I655UH6PZEcPbU&ehbc=2E312F";
+            document.getElementById('mapContainer').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+    
