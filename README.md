@@ -173,33 +173,6 @@ Response:
 }
 ```
 
-## Tourist Spots
-
-### Get All Tourist Spots
-```http
-GET /api/touristspots
-```
-
-Response:
-```json
-{
-    "status": 200,
-    "data": [
-        {
-            "id": 1,
-            "name": "Mulu Caves",
-            "description": "World's largest cave chamber",
-            "location": "Mulu, Sarawak",
-            "imageUrl": "https://example.com/mulu.jpg",
-            "category": "Nature",
-            "rating": "4.8",
-            "openingHours": "9:00 AM - 5:00 PM",
-            "contactInfo": "+60 123456789"
-        }
-    ]
-}
-```
-
 ## Error Responses
 
 All endpoints may return the following error format:
@@ -227,14 +200,15 @@ Common status codes:
 2. **Posts**:
    - Posts can include images (optional)
    - Each post is linked to a user
+   - Posts support likes functionality
 
 3. **Comments**:
    - Comments are linked to both posts and users
    - Can be retrieved for specific posts
 
-4. **Tourist Spots**:
-   - Can be used to populate the explore page
-   - Include detailed information about each location
+4. **Notifications**:
+   - Users receive notifications for post likes and comments
+   - Notifications can be marked as read
 
 ## Development Setup
 
