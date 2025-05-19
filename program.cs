@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using SarawakTourism.Data;
-using SarawakTourismApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,9 +20,6 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
-
-// Register custom services
-builder.Services.AddScoped<IEmailService, EmailService>();
 
 var app = builder.Build();
 
