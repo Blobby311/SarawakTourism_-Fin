@@ -6,7 +6,7 @@
 https://localhost:7151
 
 # Production (Azure)
-https://sarawaktourismapi.azurewebsites.net
+http://sarawaktourismapp-cadscsddbphmb7hx.southeastasia-01.azurewebsites.net
 ```
 
 ## Authentication
